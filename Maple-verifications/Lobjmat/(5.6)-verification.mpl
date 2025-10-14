@@ -1,0 +1,23 @@
+
+p__1 := p__11*x + p__10;
+p__2 := p__21*x + p__20;
+q__1 := q__11*x + q__10;
+q__2 := q__21*x + q__20;
+r__1 := r__11*x + r__10;
+r__2 := r__21*x + r__20;
+p := collect(p__1*p__2, x);
+NULL;
+q := collect(q__1*q__2, x);
+r := collect(r__1*r__2, x);
+P := collect(diff(q(x), x)*r(x) - q(x)*diff(r(x), x), x);
+Q := collect(diff(r(x), x)*p(x) - r(x)*diff(p(x), x), x);
+R := collect(diff(p(x), x)*q(x) - p(x)*diff(q(x), x), x);
+M := Matrix(3, 3, [[coeff(p, x, 0), coeff(q, x, 0), coeff(r, x, 0)], [coeff(p, x, 1), coeff(q, x, 1), coeff(r, x, 1)], [coeff(p, x, 2), coeff(q, x, 2), coeff(r, x, 2)]]);
+Delta := abs(M);
+g := collect(p__2*q__1*r__1, x);
+h := collect(p__1*q__2*r__2, x);
+T := Vector[row](4, [coeff(g, x, 2)*coeff(h, x, 0) + coeff(g, x, 0)*coeff(h, x, 2), coeff(g, x, 3)*coeff(h, x, 0) + coeff(g, x, 0)*coeff(h, x, 3), -coeff(g, x, 3)*coeff(h, x, 1) - coeff(g, x, 1)*coeff(h, x, 3), 4]);
+DD := Matrix(4, 4, [[coeff(P, x, 2), coeff(Q, x, 2), coeff(R, x, 2), 0], [-coeff(P, x, 1), -coeff(Q, x, 1), -coeff(R, x, 1), 0], [-coeff(P, x, 0), -coeff(Q, x, 0), -coeff(R, x, 0), 0], [1/8*(Delta - coeff(P, x, 1)*coeff(p, x, 1))*coeff(q, x, 1)*coeff(r, x, 1), 1/8*(Delta - coeff(Q, x, 1)*coeff(q, x, 1))*coeff(r, x, 1)*coeff(p, x, 1), 1/8*(Delta - coeff(R, x, 1)*coeff(r, x, 1))*coeff(p, x, 1)*coeff(q, x, 1), -1/8*Delta]]);
+V := Vector[column](4, [p__10*p__21 - p__11*p__20, q__10*q__21 - q__11*q__20, r__10*r__21 - r__11*r__20, (p__10*p__21 - p__11*p__20)*(q__10*q__21 - q__11*q__20)*(r__10*r__21 - r__11*r__20)]);
+verify((T . DD) . V, 0, equal);
+NULL;
